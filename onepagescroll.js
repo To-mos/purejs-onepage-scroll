@@ -124,9 +124,14 @@ function onePageScroll(element, options) {
   	}
     
   	_mouseWheelHandler = function(event) {
-  		event.preventDefault();
-  		var delta = event.wheelDelta || -event.detail;
-  		if (!_hasClass(body, "disabled-onepage-scroll")) _init_scroll(event, delta);
+        var current = document.querySelector(settings.sectionContainer + ".active");
+
+        var delta = event.wheelDelta || -event.detail;
+
+        if ((delta > 0 && current.scrollTop<=0) || (delta <= 0 && (current.scrollTop + current.offsetHeight) == current.scrollHeight)) {
+            event.preventDefault();
+            if (!_hasClass(body, "disabled-onepage-scroll")) _init_scroll(event, delta);
+        }
   	}
     
   	document.addEventListener('mousewheel', _mouseWheelHandler);
@@ -387,8 +392,12 @@ function onePageScroll(element, options) {
     var index = document.querySelector(settings.sectionContainer +".active").dataset.index,
 		    current = document.querySelector(settings.sectionContainer + "[data-index='" + index + "']"),
 		    next = document.querySelector(settings.sectionContainer + "[data-index='" + (parseInt(index) + 1) + "']");
-		    
-		    
+
+       // Disable moveDown if current section has not yet reached bottom (has overflow)
+       if (current.scrollTop + current.offsetHeight < current.scrollHeight) {
+           return;
+       }
+
 		if(!next) {
 			if (settings.loop == true) {
 				pos = 0;
@@ -430,6 +439,11 @@ function onePageScroll(element, options) {
 	  var index = document.querySelector(settings.sectionContainer +".active").dataset.index,
 		    current = document.querySelector(settings.sectionContainer + "[data-index='" + index + "']"),
 		    next = document.querySelector(settings.sectionContainer + "[data-index='" + (parseInt(index) - 1) + "']");
+
+        // inline scroll fix: disable moveUp if there is overflow
+        if(current.scrollTop > 10) {
+            return;
+        }
 
 		if(!next) {
 			if (settings.loop == true) {

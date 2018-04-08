@@ -177,41 +177,45 @@ function onePageScroll(element, options) {
     document.addEventListener("touchstart", touchstart);  
   
   	function touchstart(event) {
-  		var touches = event.touches;
-  		if (touches && touches.length) {
-  			startX = touches[0].pageX;
-  			startY = touches[0].pageY;
-  			document.addEventListener("touchmove", touchmove);
+  		if (!_hasClass(body, "disabled-onepage-scroll")) {
+  			var touches = event.touches;
+  			if (touches && touches.length) {
+  				startX = touches[0].pageX;
+  				startY = touches[0].pageY;
+  				document.addEventListener("touchmove", touchmove);
+  			}
   		}
   	}
   
   	function touchmove(event) {
-  		var touches = event.touches;
-  		if (touches && touches.length) {
-  		  event.preventDefault();
-  			var deltaX = startX - touches[0].pageX;
-  			var deltaY = startY - touches[0].pageY;
-  
-  			if (deltaX >= 50) {
-  			  var event = new Event('swipeLeft');
-  			  document.dispatchEvent(event);
-  			}
-  			if (deltaX <= -50) {
-  			  var event = new Event('swipeRight');
-  			  document.dispatchEvent(event);
-  			}
-  			if (deltaY >= 50) {
-  			  var event = new Event('swipeUp');
-  			  document.dispatchEvent(event);
-  			}
-  			if (deltaY <= -50) {
-  			  var event = new Event('swipeDown');
-  			  document.dispatchEvent(event);
-  			}
-  
-  			if (Math.abs(deltaX) >= 50 || Math.abs(deltaY) >= 50) {
-  				document.removeEventListener('touchmove', touchmove);
-  			}
+  		if (!_hasClass(body, "disabled-onepage-scroll")) {
+	  		var touches = event.touches;
+	  		if (touches && touches.length) {
+	  		  event.preventDefault();
+	  			var deltaX = startX - touches[0].pageX;
+	  			var deltaY = startY - touches[0].pageY;
+	  
+	  			if (deltaX >= 50) {
+	  			  var event = new Event('swipeLeft');
+	  			  document.dispatchEvent(event);
+	  			}
+	  			if (deltaX <= -50) {
+	  			  var event = new Event('swipeRight');
+	  			  document.dispatchEvent(event);
+	  			}
+	  			if (deltaY >= 50) {
+	  			  var event = new Event('swipeUp');
+	  			  document.dispatchEvent(event);
+	  			}
+	  			if (deltaY <= -50) {
+	  			  var event = new Event('swipeDown');
+	  			  document.dispatchEvent(event);
+	  			}
+	  
+	  			if (Math.abs(deltaX) >= 50 || Math.abs(deltaY) >= 50) {
+	  				document.removeEventListener('touchmove', touchmove);
+	  			}
+	  		}
   		}
   	}
   
